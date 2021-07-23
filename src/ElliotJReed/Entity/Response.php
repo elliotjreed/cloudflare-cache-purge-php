@@ -31,9 +31,6 @@ class Response
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasResults(): bool
     {
         return \count($this->results) > 0;
