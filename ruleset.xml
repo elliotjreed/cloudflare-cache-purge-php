@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="github.com/elliotjreed coding standard">
+    <description>Coding standards for all Elliot J. Reed projects</description>
+    <arg value="p"/>
+    <arg name="colors"/>
+    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
+    <file>./src</file>
+    <file>./tests</file>
+</ruleset>

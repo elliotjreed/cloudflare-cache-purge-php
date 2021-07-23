@@ -1,0 +1,9 @@
+composer.phar
+/vendor
+/.idea
+.phpunit.result.cache
+/coverage
+infection.log
+composer.lock
+/build
+.php-cs-fixer.cache
