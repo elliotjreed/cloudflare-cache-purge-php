@@ -52,7 +52,6 @@
     ],
     "ci": [
       "@phpunit:ci",
-      "@static-analysis",
       "@phpcs:github-actions"
     ],
     "phpunit": "vendor/bin/phpunit -c phpunit.xml",
