@@ -1,6 +1,6 @@
 {
-  "name": "elliotjreed/cloudflare-api-php",
-  "description": "A PHP wrapper for Cloudflare's API",
+  "name": "elliotjreed/cloudflare-cache-purge",
+  "description": "A PHP wrapper for Cloudflare's API, for listing Zones and purging the cache.",
   "keywords": [
     "cloudflare"
   ],
