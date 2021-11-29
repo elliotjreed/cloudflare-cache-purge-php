@@ -32,7 +32,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --classmap-authoritative --no-suggest --no-progress
+        run: composer install --no-interaction --classmap-authoritative --no-progress
 
       - name: Run tests
-        run: composer run-script ci
+        run: PHP_CS_FIXER_IGNORE_ENV=1 composer run-script ci
