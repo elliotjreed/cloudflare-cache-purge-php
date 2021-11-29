@@ -18,6 +18,7 @@ return (new PhpCsFixer\Config())
         'trailing_comma_in_multiline' => [],
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
         'concat_space' => ['spacing' => 'one'],
+        'types_spaces' => ['space' => 'single'],
         'native_function_invocation' => [
             'include' => [NativeFunctionInvocationFixer::SET_ALL],
             'scope' => 'all'
