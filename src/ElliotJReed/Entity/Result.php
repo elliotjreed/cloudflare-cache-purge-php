@@ -7,7 +7,6 @@ namespace ElliotJReed\Entity;
 class Result
 {
     private ?string $id = null;
-
     private ?string $name = null;
 
     /**

@@ -54,13 +54,11 @@ $urls = [
 ];
 
 try {
-    $cacheResponses = (new Cache(new Client(), 'SECRET CLOUDFLARE API TOKEN'))
+    $cacheResponse = (new Cache(new Client(), 'SECRET CLOUDFLARE API TOKEN'))
         ->purgeFiles('zone-id-from-api-or-dashboard', $urls);
 
-    foreach ($cacheResponses as $cacheResponse) {
-        foreach ($cacheResponse->getResults() as $result) {
-            echo 'Cache Purge Response ID: ' . $result->getId() . \PHP_EOL . \PHP_EOL;
-        }
+    foreach ($cacheResponse->getResults() as $result) {
+        echo 'Cache Purge Response ID: ' . $result->getId() . \PHP_EOL . \PHP_EOL;
     }
 } catch (Cloudflare $exception) {
     echo $exception->getMessage() . \PHP_EOL;

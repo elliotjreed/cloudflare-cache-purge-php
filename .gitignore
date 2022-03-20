@@ -6,3 +6,4 @@ composer.phar
 infection.log
 /build
 .php-cs-fixer.cache
+/bin
