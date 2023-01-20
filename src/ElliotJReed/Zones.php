@@ -15,10 +15,10 @@ class Zones
     /**
      * Zones constructor.
      *
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param string                      $token
+     * @param \GuzzleHttp\ClientInterface $client A Guzzle HTTP client
+     * @param string                      $token  The Cloudflare authorisation token
      */
-    public function __construct(private ClientInterface $client, private string $token)
+    public function __construct(private readonly ClientInterface $client, private readonly string $token)
     {
     }
 

@@ -9,17 +9,16 @@ use ElliotJReed\Entity\Result;
 use ElliotJReed\Exception\Cloudflare;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use JsonException;
 
 class Cache
 {
     /**
      * Cache constructor.
      *
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param string                      $token
+     * @param \GuzzleHttp\ClientInterface $client A Guzzle HTTP client
+     * @param string                      $token  The Cloudflare authorisation token
      */
-    public function __construct(private ClientInterface $client, private string $token)
+    public function __construct(private readonly ClientInterface $client, private readonly string $token)
     {
     }
 
@@ -59,7 +58,7 @@ class Cache
             );
 
             $apiResponse = \json_decode($request->getBody()->getContents(), false, 16, \JSON_THROW_ON_ERROR);
-        } catch (ClientException | JsonException $exception) {
+        } catch (ClientException | \JsonException $exception) {
             throw new Cloudflare('Cloudflare Cache Purge API error', previous: $exception);
         }
 
