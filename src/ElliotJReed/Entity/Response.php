@@ -20,8 +20,6 @@ class Response
     }
 
     /**
-     * @param \ElliotJReed\Entity\Result ...$results
-     *
      * @return $this
      */
     public function addResults(Result ...$results): self

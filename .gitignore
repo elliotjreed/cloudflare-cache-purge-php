@@ -2,6 +2,7 @@ composer.phar
 /vendor
 /.idea
 .phpunit.result.cache
+.phpunit.cache
 /coverage
 infection.log
 /build
