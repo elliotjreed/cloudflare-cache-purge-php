@@ -2,6 +2,8 @@
 
 # Cloudflare Cache Purge for PHP
 
+PHP 8.1 or above is required.
+
 This library allows the listing of Cloudflare "Zones" and purging files from the Cloudflare cache within a Zone.
 
 It could be used as part of a deployment process for example.
