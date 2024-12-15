@@ -7,7 +7,7 @@ namespace ElliotJReed\Entity;
 class Response
 {
     /**
-     * @var \ElliotJReed\Entity\Result[]
+     * @var Result[]
      */
     private array $results = [];
 
