@@ -3,14 +3,18 @@
 declare(strict_types=1);
 
 $finder = (new PhpCsFixer\Finder())
-    ->in([__DIR__ . '/src', __DIR__ . '/tests']);
+    ->in(__DIR__)
+    ->exclude('var')
+    ->exclude('vendor');
 
 return (new PhpCsFixer\Config())
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRules([
         '@PSR2' => true,
         '@PSR12:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
+        'declare_strict_types' => ['strategy' => 'add_when_missing'],
         'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => []],
         'nullable_type_declaration_for_default_null_value' => ['use_nullable_type_declaration' => true],
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
@@ -20,6 +24,6 @@ return (new PhpCsFixer\Config())
         'native_function_invocation' => [
             'include' => ['@all'],
             'scope' => 'all'
-        ],
+        ]
     ])
     ->setFinder($finder);
