@@ -35,13 +35,31 @@ class Cache
 
         $response = new Response();
         foreach ($chunked as $files) {
-            $response->addResults($this->sendRequest($zoneId, $files));
+            $response->addResults($this->sendRequest($zoneId, ['files' => $files]));
         }
 
         return $response;
     }
 
-    private function sendRequest(string $zoneId, array $files): Result
+    /**
+     * @param string   $zoneId           The Zone ID of the Cloudflare Zone / domain where the files are cached
+     * @param string[] $hostnamesToPurge An array of hostnames (eg. www.example.com) to purge from the Cloudflare cache
+     *
+     * @throws Cloudflare
+     */
+    public function purgeHosts(string $zoneId, array $hostnamesToPurge): Response
+    {
+        $chunked = \array_chunk(\array_values($hostnamesToPurge), 30);
+
+        $response = new Response();
+        foreach ($chunked as $hosts) {
+            $response->addResults($this->sendRequest($zoneId, ['hosts' => $hosts]));
+        }
+
+        return $response;
+    }
+
+    private function sendRequest(string $zoneId, array $body): Result
     {
         try {
             $request = $this->client->request(
@@ -52,9 +70,7 @@ class Cache
                         'Authorization' => 'Bearer ' . $this->token,
                         'Content-Type' => 'application/json'
                     ],
-                    'json' => [
-                        'files' => $files
-                    ]
+                    'json' => $body
                 ]
             );
 

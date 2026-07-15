@@ -125,4 +125,98 @@ final class CacheTest extends TestCase
 
         (new Cache($client, 'a-secret-clouflare-token'))->purgeFiles('zone-id', ['file.txt']);
     }
+
+    public function testItReturnsSingleEntryResponseArrayWhenPurgingHostnames(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, [], '{
+              "success": true,
+              "errors": [],
+              "messages": [],
+              "result": {
+                "id": "9a7806061c88ada191ed06f989cc3dac"
+              }
+            }')
+        ]);
+
+        $client = new Client(['handler' => HandlerStack::create($mock)]);
+
+        $cache = new Cache($client, 'a-secret-clouflare-token');
+
+        $this->assertEquals(
+            (new ResponseEntity())->addResults((new Result())->setId('9a7806061c88ada191ed06f989cc3dac')),
+            $cache->purgeHosts('zone-id', ['www.example.com', 'subdomain.example.com'])
+        );
+
+        $lastRequest = $mock->getLastRequest();
+        $this->assertSame(
+            '{"hosts":["www.example.com","subdomain.example.com"]}',
+            $lastRequest->getBody()->getContents()
+        );
+
+        $headers = $lastRequest->getHeaders();
+        $this->assertSame(['application/json'], $headers['Content-Type']);
+        $this->assertSame(['Bearer a-secret-clouflare-token'], $headers['Authorization']);
+    }
+
+    public function testItReturnsTwoEntriesResponseArrayWhenMoreThanThirtyHostnamesInRequest(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, [], '{
+              "success": true,
+              "errors": [],
+              "messages": [],
+              "result": {
+                "id": "id-1"
+              }
+            }'),
+            new Response(200, [], '{
+              "success": true,
+              "errors": [],
+              "messages": [],
+              "result": {
+                "id": "id-2"
+              }
+            }')
+        ]);
+
+        $client = new Client(['handler' => HandlerStack::create($mock)]);
+
+        $cache = new Cache($client, 'a-secret-clouflare-token');
+
+        $hostnames = [];
+        for ($subdomain = 1; $subdomain <= 32; ++$subdomain) {
+            $hostnames[] = 'subdomain' . $subdomain . '.example.com';
+        }
+
+        $response = $cache->purgeHosts('zone-id', $hostnames);
+
+        $this->assertEquals(
+            (new ResponseEntity())->addResults((new Result())->setId('id-1'), (new Result())->setId('id-2')),
+            $response
+        );
+
+        $this->assertSame(
+            '{"hosts":["subdomain31.example.com","subdomain32.example.com"]}',
+            $mock->getLastRequest()->getBody()->getContents()
+        );
+
+        $headers = $mock->getLastRequest()->getHeaders();
+        $this->assertSame(['application/json'], $headers['Content-Type']);
+        $this->assertSame(['Bearer a-secret-clouflare-token'], $headers['Authorization']);
+    }
+
+    public function testItThrowsExceptionWhenHostnamePurgeRequestIsUnsuccessful(): void
+    {
+        $mock = new MockHandler([
+            new Response(403, [])
+        ]);
+
+        $client = new Client(['handler' => HandlerStack::create($mock)]);
+
+        $this->expectException(Cloudflare::class);
+        $this->expectExceptionMessage('Cloudflare Cache Purge API error');
+
+        (new Cache($client, 'a-secret-clouflare-token'))->purgeHosts('zone-id', ['www.example.com']);
+    }
 }

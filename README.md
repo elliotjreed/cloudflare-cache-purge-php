@@ -70,9 +70,40 @@ try {
 
 ```
 
+### Purging the Cache for hostnames within a Zone
+
+The entire cache for one or more hostnames (for example `www.example.com` or `subdomain.example.com`) within a Zone can be purged.
+Purging by hostname is available on all Cloudflare plans.
+
+```php
+<?php
+
+use ElliotJReed\Cache;
+use ElliotJReed\Exception\Cloudflare;
+use GuzzleHttp\Client;
+
+$hostnames = [
+    'www.example.com',
+    'subdomain.example.com'
+];
+
+try {
+    $cacheResponse = (new Cache(new Client(), 'SECRET CLOUDFLARE API TOKEN'))
+        ->purgeHosts('zone-id-from-api-or-dashboard', $hostnames);
+
+    foreach ($cacheResponse->getResults() as $result) {
+        echo 'Cache Purge Response ID: ' . $result->getId() . \PHP_EOL . \PHP_EOL;
+    }
+} catch (Cloudflare $exception) {
+    echo $exception->getMessage() . \PHP_EOL;
+    echo $exception->getPrevious()->getMessage() . \PHP_EOL;
+}
+
+```
+
 ## Development
 
-PHP 8.0 or above and Composer is expected to be installed.
+PHP 8.4 or above and Composer is expected to be installed.
 
 ### Installing Composer
 
